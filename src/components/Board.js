@@ -19,30 +19,38 @@ export default function Board({ history, currentMove, handlePlay }) {
         squares[a] === squares[b] &&
         squares[a] === squares[c]
       ) {
-        return squares[a];
+        return {
+          winner: squares[a],
+          highlight: [a, b, c],
+        };
       }
     }
-    return null;
+    return {
+      winner: null,
+      highlight: [],
+    };
   }
   function handleClick(i) {
-    if (calculateWinner(squares) || squares[i]) {
+    if (winner || squares[i]) {
       return;
     }
 
     const nextSquares = squares.slice();
 
     nextSquares[i] = currentMove % 2 === 0 ? 'X' : 'O';
-    handlePlay(nextSquares);
+    handlePlay(nextSquares, i);
   }
 
   const rows = ['rowOne', 'rowTwo', 'rowThree'];
   const squares = history[currentMove];
-  const winner = calculateWinner(squares);
+  const { winner, highlight } = calculateWinner(squares);
 
   let status;
 
   if (winner) {
     status = 'Winner: ' + winner;
+  } else if (!winner && history.length === 10) {
+    status = "It's a draw";
   } else {
     status = 'Next player: ' + (currentMove % 2 === 0 ? 'X' : 'O');
   }
@@ -63,6 +71,7 @@ export default function Board({ history, currentMove, handlePlay }) {
                     <Square
                       key={squareIndex}
                       value={squares[squareIndex]}
+                      highlight={highlight.includes(squareIndex) ? true : false}
                       onClick={() => handleClick(squareIndex)}
                     />
                   );

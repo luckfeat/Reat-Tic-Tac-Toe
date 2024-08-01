@@ -4,10 +4,14 @@ import Info from './components/Info';
 import './App.css';
 
 const App = () => {
-  function handlePlay(nextSquares) {
+  function handlePlay(nextSquares, i) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+    const row = Math.floor(i / 3) + 1;
+    const column = (i % 3) + 1;
+
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
+    setLocation([row, column]);
   }
   function jumpTo(nextMove) {
     setCurrentMove(nextMove);
@@ -15,6 +19,7 @@ const App = () => {
 
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
+  const [location, setLocation] = useState(null);
 
   return (
     <>
@@ -26,18 +31,11 @@ const App = () => {
       <Info
         history={history}
         currentMove={currentMove}
+        location={location}
         jumpTo={jumpTo}
-        setHistory={setHistory}
       />
     </>
   );
 };
 
 export default App;
-
-/*
- *
- * When someone wins, highlight the three squares that caused the win (and when no one wins, display a message about the result being a draw).
- * Display the location for each move in the format (row, col) in the move history li
- *
- * */
