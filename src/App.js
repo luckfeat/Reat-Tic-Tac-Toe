@@ -23,6 +23,15 @@ const App = () => {
 
   return (
     <>
+      <button
+        onClick={() => {
+          setHistory([Array(9).fill(null)]);
+          setCurrentMove(0);
+          setLocation(null);
+        }}
+      >
+        Reset
+      </button>
       <Board
         history={history}
         currentMove={currentMove}
